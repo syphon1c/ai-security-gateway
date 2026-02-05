@@ -1,0 +1,106 @@
+# AI Security Gateway - Git Ignore File
+
+# Directories to ignore
+reports/*
+backups/*
+build/*
+scripts/basic-test/*
+scripts/cache-test/*
+test-reports/*
+test/testdata/samples/*
+!.github/workflows/*
+.github/copilot-instructions.md
+test_reports/*
+.claude/*
+.cursor/*
+.vscode/*
+
+# macOS system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Go build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+!/cmd/mcpscan/
+mcpscan
+mcpscan.exe
+ai-security-gateway
+
+# Go test files
+*.test
+*.out
+coverage.txt
+*.cover
+
+# Go module cache
+go.sum.bak
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+proxy.log
+
+# Test binaries and output
+*.test.exe
+test_results/
+test-results/
+
+# Security scan output files
+scan-result-*.json
+mcp_security_report_*.json
+mcp_security_report_*.html
+mcp_security_report_*.pdf
+mcp_security_report_*.txt
+
+# Mock server database
+/tmp/mock_mcp_test.db
+*.db
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Authentication tokens and secrets
+*.jwt_token
+.jwt_token
+test/integration/.jwt_token
+test/**/.jwt_token
+*.token
+*.secret
+CLAUDE.md
+
+# Session and authentication files
+session_*.json
+oauth_tokens.json
+api_keys.json
+
+# Python Virtual Env
+venv/
+/venv/
+*.pyc
+__pycache__/
+
+# Backup files
+*.bak
+*.backup
+
+# Archive files
+
