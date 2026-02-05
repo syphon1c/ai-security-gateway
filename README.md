@@ -1,6 +1,6 @@
 # AI Security Gateway
 
-[![Beta Release](https://img.shields.io/badge/Release-v2026.2.1--beta-orange?style=flat-square)](https://github.com/syphon1c/ai-security-gateway-beta/releases)
+[![Beta Release](https://img.shields.io/badge/Release-v2026.2.1--beta-orange?style=flat-square)](https://github.com/syphon1c/ai-security-gateway/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 
@@ -19,7 +19,7 @@ Getting started document can be found at [AI Security Gateway Docs](https://syph
 This is the **first public beta release (v2026.1.1-beta)** of the AI Security Gateway. While the software has been tested, please note:
 
 - **Test thoroughly** before deploying to production/personal environments
-- **Report bugs** and provide feedback via [GitHub Issues](https://github.com/syphon1c/ai-security-gateway-beta/issues)
+- **Report bugs** and provide feedback via [GitHub Issues](https://github.com/syphon1c/ai-security-gateway/issues)
 - **Review the [CHANGELOG.md](CHANGELOG.md)** for complete feature details and known limitations
 - **Community feedback** is welcomed to help improve the software
 
@@ -154,7 +154,7 @@ Centralized management for A2A-compatible agents with complete security and acce
 
 ### Download Pre-Built Release (Recommended)
 
-Download the latest release for your operating system from the [GitHub Releases](https://github.com/syphon1c/ai-security-gateway-beta/releases) page:
+Download the latest release for your operating system from the [GitHub Releases](https://github.com/syphon1c/ai-security-gateway/releases) page:
 
 **Available Platforms:**
 - **Linux** (amd64, arm64): `unified-admin-linux-<arch>.tar.gz`
@@ -166,7 +166,7 @@ Download the latest release for your operating system from the [GitHub Releases]
 **Linux/macOS:**
 ```bash
 # 1. Download and extract
-curl -LO https://github.com/syphon1c/ai-security-gateway-beta/releases/latest/download/unified-admin-linux-amd64.tar.gz
+curl -LO https://github.com/syphon1c/ai-security-gateway/releases/latest/download/unified-admin-linux-amd64.tar.gz
 tar -xzf unified-admin-linux-amd64.tar.gz
 cd unified-admin-linux-amd64
 
@@ -267,51 +267,12 @@ Each release package includes everything you need:
 - ✅ **Service files** - Systemd service (Linux) or Launchd plist (macOS) for production
 - ✅ **Pre-built frontend** - Production-optimized Vue.js app ready for Docker deployment
 - ✅ **Docker configuration** - `docker-compose.frontend.yml` and `Dockerfile.frontend`
-- ✅ **Default security policies** - 7 JSON policy files with 250+ detection rules
-- ✅ **Configuration templates** - `env.example` and `configs/config.example.yaml`
+- ✅ **Default security policies** - 13 JSON policy files with 250+ detection rules
+- ✅ **Configuration templates** - `env.example`
 - ✅ **Documentation** - `QUICKSTART.md` and `INSTALL.md` guides
 
 **No compilation required** - download, configure, and run!
 
-
-#### Option 2: Development Setup (Source)
-
-For developers working on the codebase:
-
-**Backend (API Server) - Binary Development:**
-```bash
-# 1. Clone the repository
-git clone https://github.com/syphon1c/ai-security-gateway.git
-cd ai-security-gateway
-
-# 2. Install Go dependencies and build binary
-go mod tidy
-make build
-# Or: go build -o build/unified-admin ./cmd/unified-admin
-
-# 3. Configure environment
-cp env.example .env
-nano .env  # Set JWT_SECRET and ENCRYPTION_KEY
-
-# 4. Run API server (binary)
-./build/unified-admin
-# API server starts on http://localhost:8080
-```
-
-**Frontend - Development Server:**
-```bash
-# In a separate terminal, start frontend dev server
-cd frontend
-npm install
-npm run dev
-# Frontend dev server starts on http://localhost:5173
-# Automatically proxies API calls to backend on :8080
-```
-
-**Prerequisites for development:**
-- Go 1.21+ (API server backend)
-- Node.js 20.19+ or 22.12+ (frontend development)
-- Git
 
 ### Required Configuration
 
@@ -386,7 +347,7 @@ See `QUICKSTART.md` in the release package for detailed instructions.
    - Username: `admin`
    - Password: The temporary password shown during startup
 
-4. **Change your password** immediately after first login (Settings → User Management)
+4. **Change your password** immediately after first login
 
 5. **Create Your First Proxy**:
    - Navigate to "Infrastructure → Proxy Management"
@@ -430,7 +391,6 @@ npm run build
 # 2. Deploy dist/ contents to your web server
 # - Copy frontend/dist/* to nginx/apache document root
 # - Configure reverse proxy for /api/* and /ws to backend:8080
-# - See docs/web-server-deployment.md for detailed configs
 ```
 
 **No Docker required for API server** - uses native Go binaries for optimal performance!
@@ -458,79 +418,35 @@ The easiest way to use the AI Security Gateway is through the web interface:
 4. **Monitor traffic**: View real-time requests, alerts, and metrics
 
 
-## 🏗️ Architecture
-
-The AI Security Gateway uses a modern multi-layered architecture:
-
-```
-┌─────────────────────────────────────────────────┐
-│           Vue.js Web Interface (Port 80)         │
-│  Real-time Dashboard, Proxy Management, Alerts   │
-└─────────────────────┬───────────────────────────┘
-                      │ REST API + WebSocket
-┌─────────────────────▼───────────────────────────┐
-│       Go Backend (unified-admin) (Port 8080)     │
-│  • Multi-Proxy Service  • Policy Engine          │
-│  • Dashboard Service    • Alert Management       │
-│  • Auth Service (JWT)   • OAuth 2.1 Handler      │
-└─────────────────────┬───────────────────────────┘
-                      │ Database Layer (GORM)
-┌─────────────────────▼───────────────────────────┐
-│          SQLite Database (ai-gateway.db)         │
-│  Proxies, Alerts, Logs, Users, Tokens, Tools    │
-└──────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────┐
-│            MCP/LLM Proxy Instances               │
-│  Proxy 1 (MCP) → Target MCP Server               │
-│  Proxy 2 (LLM) → OpenAI API                      │
-│  Proxy 3 (MCP) → Anthropic MCP                   │
-│            (Unlimited instances)                 │
-└──────────────────────────────────────────────────┘
-```
-
-**Key Components:**
-- **API Server**: Central management hub with 90+ REST endpoints
-- **Proxy Engine**: Multi-instance proxy manager supporting HTTP, WebSocket, SSE
-- **Policy Engine**: JSON-based security rules with compiled regex patterns
-- **Alert System**: Real-time threat detection and notification pipeline
-- **Database Layer**: SQLite with GORM for persistence and querying
-- **OAuth Service**: User authentication and session management
-
-For detailed architecture documentation, see **[User Architecture Overview](docs/user-architecture-overview.md)**.
-
-
-
-
 ## 🤝 Support & Contributing
 
 ### 📚 Documentation
-For detailed usage instructions, advanced configuration, and troubleshooting guides, see the complete documentation in the [`/docs`](docs/) directory.
+Documents can be found at [AI Security Gateway Docs](https://syphon1c.github.io/)
 
 ### 🐛 Bug Reports & Feature Requests  
-This is a beta release - community feedback is welcomed! Use [GitHub Issues](https://github.com/syphon1c/ai-security-gateway-beta/issues) to:
+This is a beta release - community feedback is welcomed! Use [GitHub Issues](https://github.com/syphon1c/ai-security-gateway/issues) to:
 - Report bugs and unexpected behaviour
 - Request new features or improvements  
 - Share usage experiences and suggestions
 - Contribute to documentation improvements
 
 ### 🤝 Contributing
-Contributions are welcome! Please submit pull requests for:
+Contributions will be welcomed once the full source code is released:
 - Bug fixes and improvements
 - New security detection rules and policies
 - Documentation enhancements
 - Test coverage improvements
 
-**Note**: When using AI assistance for contributions, always verify the code works as expected and include appropriate tests.
+**Note**: When using AI assistance for contributions, always verify the code works as expected and include appropriate tests, not against it buit verify please.
 
 ### 📞 Support
 - **GitHub Issues**: Primary support channel for bug reports and questions
-- **Documentation**: Comprehensive guides available in the [`/docs`](docs/) directory
+- **Documentation**: Comprehensive guides available: [AI Security Gateway Docs](https://syphon1c.github.io/)
 - **Examples**: Sample configurations and usage patterns in [`/examples`](examples/)
 
 ## 📝 Development Note
 
-This project has utilized AI assistance for portions of code implementation and documentation to enhance development efficiency while maintaining code quality and security standards through comprehensive testing.
+This project has utilized AI assistance for portions of code implementation and documentation to enhance development efficiency while maintaining code quality and security standards through comprehensive testing and manual verification.
 
 ## 📄 License
 
@@ -539,12 +455,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 Special thanks to:
-- The Model Context Protocol (MCP) community for protocol specifications
 - Contributors and early adopters providing valuable feedback
-- Open source projects that made this gateway possible
 
 ---
 
-**AI Security Gateway 2026.1.1-beta** - Test and secure your AI instances - meant for research and testing!
+**AI Security Gateway 2026.2.1-beta** - Test and secure your AI instances - meant for research and testing!
 
 *Released as-is for testing and community feedback.*
