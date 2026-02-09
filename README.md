@@ -149,6 +149,12 @@ Centralized management for A2A-compatible agents with complete security and acce
 - **Audit Logging**: Complete audit trails with user attribution, request/response payloads, and security events
 - **Real-Time Monitoring**: View invocation logs, task states, and agent usage analytics
 
+### Canary Token Detection
+Canary Token Injection is a security feature that helps detect when data from one user or session is accidentally exposed to another user. Think of it like a "tripwire" for an early warning system that alerts you to potential data leakage in your AI systems.
+- **Cross User**: Canary from user A appeared in response to user B 
+- **Cross Session**: Canary from session A appeared in user's different session B 
+- **Memorization**: Provider-specific memorization detection 
+- **Stale Canary**: Canary older than 7 days appeared (possible memorization) 
 
 ## 🚀 Quick Start
 

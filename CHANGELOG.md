@@ -5,6 +5,28 @@ All notable changes to the AI Security Gateway project will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Calendar Versioning](https://calver.org/).
 
+## [2026.2.2-beta]
+
+### Second Public Release
+
+#### Canary Token Detection
+Canary Token Injection is a security feature that helps detect when data from one user or session is accidentally exposed to another user. Think of it like a "tripwire" for an early warning system that alerts you to potential data leakage in your AI systems.
+- **Cross User**: Canary from user A appeared in response to user B 
+- **Cross Session**: Canary from session A appeared in user's different session B 
+- **Memorization**: Provider-specific memorization detection 
+- **Stale Canary**: Canary older than 7 days appeared (possible memorization) 
+
+#### Improved MCP Tool Rate limiter
+- Improvements to the per-user/per-tool rate limiter for MCP Server PRoxies
+- Improved OAuth MCP Tool permission overrides per-user
+
+#### Bug fixes & UI Improvements
+- Improved visual indicators for Proxy audit features (enabled or disabled)
+- Moved all MCP/LLM Dashboard API Endpoints behind Auth
+- Global AI Security Gateway User-Agent applied to all tool requests
+
+
+
 ## [2026.2.1-beta]
 
 ### 🎉 First Public Beta Release
