@@ -149,7 +149,7 @@ Centralized management for A2A-compatible agents with complete security and acce
 - **Audit Logging**: Complete audit trails with user attribution, request/response payloads, and security events
 - **Real-Time Monitoring**: View invocation logs, task states, and agent usage analytics
 
-#### 🕵️ Canary Token Detection
+### 🕵️ Canary Token Detection
 Canary Token Injection is a security feature that helps detect when data from one user or session is accidentally exposed to another. Think of it as a tripwire — an early warning system that alerts you to potential data leakage in your AI systems.
 
 When proxying requests, the gateway silently injects unique, invisible tokens into each user's conversation. If a token surfaces where it shouldn't, you'll know immediately.
@@ -160,7 +160,7 @@ When proxying requests, the gateway silently injects unique, invisible tokens in
 - **Provider Memorisation**: A canary resurfaced without being present in the current context, suggesting the LLM provider has memorised prior conversation data
 - **Stale Canary**: A canary older than 7 days reappeared, a strong indicator of long-term memorisation by the model provider
 
-#### 🛡️ Guardrails Evaluation
+### 🛡️ Guardrails Evaluation
 Guardrails Evaluation is automated penetration testing for your AI safety controls. It runs a comprehensive suite of security test cases against your endpoints and scores the results against the **OWASP LLM Top 10** and **NIST AI Risk Management Framework**.
 
 **Key features:**
