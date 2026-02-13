@@ -1,6 +1,6 @@
 # AI Security Gateway
 
-[![Beta Release](https://img.shields.io/badge/Release-v2026.2.1--beta-orange?style=flat-square)](https://github.com/syphon1c/ai-security-gateway/releases)
+[![Beta Release](https://img.shields.io/badge/Release-v2026.2.3--beta-orange?style=flat-square)](https://github.com/syphon1c/ai-security-gateway/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 
@@ -16,7 +16,7 @@ Getting started document can be found at [AI Security Gateway Docs](https://syph
 
 ## ⚠️ Beta Release Notice
 
-This is the **first public beta release (v2026.1.1-beta)** of the AI Security Gateway. While the software has been tested, please note:
+This is the **third public beta release (v2026.2.3-beta)** of the AI Security Gateway. While the software has been tested, please note:
 
 - **Test thoroughly** before deploying to production/personal environments
 - **Report bugs** and provide feedback via [GitHub Issues](https://github.com/syphon1c/ai-security-gateway/issues)
@@ -149,12 +149,27 @@ Centralized management for A2A-compatible agents with complete security and acce
 - **Audit Logging**: Complete audit trails with user attribution, request/response payloads, and security events
 - **Real-Time Monitoring**: View invocation logs, task states, and agent usage analytics
 
-### Canary Token Detection
-Canary Token Injection is a security feature that helps detect when data from one user or session is accidentally exposed to another user. Think of it like a "tripwire" for an early warning system that alerts you to potential data leakage in your AI systems.
-- **Cross User**: Canary from user A appeared in response to user B 
-- **Cross Session**: Canary from session A appeared in user's different session B 
-- **Memorization**: Provider-specific memorization detection 
-- **Stale Canary**: Canary older than 7 days appeared (possible memorization) 
+#### 🕵️ Canary Token Detection
+Canary Token Injection is a security feature that helps detect when data from one user or session is accidentally exposed to another. Think of it as a tripwire — an early warning system that alerts you to potential data leakage in your AI systems.
+
+When proxying requests, the gateway silently injects unique, invisible tokens into each user's conversation. If a token surfaces where it shouldn't, you'll know immediately.
+
+**Detection types:**
+- **Cross-User Leakage**: A canary from User A appeared in a response to User B, indicating data bleed between users
+- **Cross-Session Leakage**: A canary from Session A appeared in the same user's Session B, indicating session isolation failure
+- **Provider Memorisation**: A canary resurfaced without being present in the current context, suggesting the LLM provider has memorised prior conversation data
+- **Stale Canary**: A canary older than 7 days reappeared, a strong indicator of long-term memorisation by the model provider
+
+#### 🛡️ Guardrails Evaluation
+Guardrails Evaluation is automated penetration testing for your AI safety controls. It runs a comprehensive suite of security test cases against your endpoints and scores the results against the **OWASP LLM Top 10** and **NIST AI Risk Management Framework**.
+
+**Key features:**
+
+- **80+ built-in test cases** across 12 categories, with the ability to add your own custom tests
+- **Compliance scoring** mapped to OWASP LLM Top 10 and NIST AI RMF
+- **Test any endpoint**: works with any API that wraps an LLM, not just direct LLM providers. Import endpoints via curl command paste
+- **Multi-turn attack simulation**: tests that span multiple conversation turns to detect escalation vulnerabilities
+- **Per-category risk breakdown** with pass/fail rates and weighted risk scores
 
 ## 🚀 Quick Start
 
@@ -465,6 +480,6 @@ Special thanks to:
 
 ---
 
-**AI Security Gateway 2026.2.1-beta** - Test and secure your AI instances - meant for research and testing!
+**AI Security Gateway 2026.2.3-beta** - Test and secure your AI instances - meant for research and testing!
 
 *Released as-is for testing and community feedback.*

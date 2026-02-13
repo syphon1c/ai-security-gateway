@@ -5,6 +5,16 @@ All notable changes to the AI Security Gateway project will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Calendar Versioning](https://calver.org/).
 
+
+## [2026.2.3-beta]
+
+### 🎉 Third Public Beta Release
+
+The **AI Security Gateway** is a unified security platform providing real-time monitoring, policy enforcement, and threat detection for Large Language Model (LLM) APIs and Model Context Protocol (MCP) servers. This beta release represents a comprehensive security proxy and monitoring platform for AI infrastructure.
+
+This release introduces our Guardrails Evaluation scanning tool, improved relationship visualisation graphs on the dashboard, and enhancements to the Canary Token detection feature.
+
+
 ## [2026.2.2-beta]
 
 ### Second Public Release
@@ -24,7 +34,6 @@ Canary Token Injection is a security feature that helps detect when data from on
 - Improved visual indicators for Proxy audit features (enabled or disabled)
 - Moved all MCP/LLM Dashboard API Endpoints behind Auth
 - Global AI Security Gateway User-Agent applied to all tool requests
-
 
 
 ## [2026.2.1-beta]
@@ -134,6 +143,28 @@ Getting started document can be found at [AI Security Gateway Docs](https://syph
 - **Security Integration**: All invocations validated by policy engine with risk scoring
 - **Audit Logging**: Complete audit trails with user attribution and request/response payloads
 - **Real-Time Monitoring**: View invocation logs, task states, agent usage analytics
+
+#### 🕵️ Canary Token Detection
+Canary Token Injection is a security feature that helps detect when data from one user or session is accidentally exposed to another. Think of it as a tripwire — an early warning system that alerts you to potential data leakage in your AI systems.
+
+When proxying requests, the gateway silently injects unique, invisible tokens into each user's conversation. If a token surfaces where it shouldn't, you'll know immediately.
+
+**Detection types:**
+- **Cross-User Leakage**: A canary from User A appeared in a response to User B, indicating data bleed between users
+- **Cross-Session Leakage**: A canary from Session A appeared in the same user's Session B, indicating session isolation failure
+- **Provider Memorisation**: A canary resurfaced without being present in the current context, suggesting the LLM provider has memorised prior conversation data
+- **Stale Canary**: A canary older than 7 days reappeared, a strong indicator of long-term memorisation by the model provider
+
+#### 🛡️ Guardrails Evaluation
+Guardrails Evaluation is automated penetration testing for your AI safety controls. It runs a comprehensive suite of security test cases against your endpoints and scores the results against the **OWASP LLM Top 10** and **NIST AI Risk Management Framework**.
+
+**Key features:**
+
+- **80+ built-in test cases** across 12 categories, with the ability to add your own custom tests
+- **Compliance scoring** mapped to OWASP LLM Top 10 and NIST AI RMF
+- **Test any endpoint**: works with any API that wraps an LLM, not just direct LLM providers. Import endpoints via curl command paste
+- **Multi-turn attack simulation**: tests that span multiple conversation turns to detect escalation vulnerabilities
+- **Per-category risk breakdown** with pass/fail rates and weighted risk scores
 
 ### 🔄 Cross App Access (XAA) - 🧪 Experimental
 Okta Identity-JAG token support for cross-application access control:
