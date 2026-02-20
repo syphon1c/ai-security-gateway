@@ -5,6 +5,20 @@ All notable changes to the AI Security Gateway project will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Calendar Versioning](https://calver.org/).
 
+## [2026.2.4-beta]
+
+### 🎉 Fourth Public Beta Release
+
+This release introduces the **AI Security Skills Hub**, a centralised skill approval authority for AI assistants. It also adds **Agent-to-Agent (A2A) Card Change Detection** to protect against rug-pull attacks, and redesigned dashboards across the platform.
+
+
+## [2026.2.3-beta]
+
+### 🎉 Third Public Beta Release
+
+The **AI Security Gateway** is a unified security platform providing real-time monitoring, policy enforcement, and threat detection for Large Language Model (LLM) APIs and Model Context Protocol (MCP) servers. This beta release represents a comprehensive security proxy and monitoring platform for AI infrastructure.
+
+This release introduces our Guardrails Evaluation scanning tool, improved relationship visualisation graphs on the dashboard, and enhancements to the Canary Token detection feature.
 
 ## [2026.2.3-beta]
 

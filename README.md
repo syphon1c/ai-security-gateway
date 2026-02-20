@@ -1,6 +1,6 @@
 # AI Security Gateway
 
-[![Beta Release](https://img.shields.io/badge/Release-v2026.2.3--beta-orange?style=flat-square)](https://github.com/syphon1c/ai-security-gateway/releases)
+[![Beta Release](https://img.shields.io/badge/Release-v2026.2.4--beta-orange?style=flat-square)](https://github.com/syphon1c/ai-security-gateway/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 
@@ -16,7 +16,7 @@ Getting started document can be found at [AI Security Gateway Docs](https://syph
 
 ## ⚠️ Beta Release Notice
 
-This is the **third public beta release (v2026.2.3-beta)** of the AI Security Gateway. While the software has been tested, please note:
+This is the **third public beta release (v2026.2.4-beta)** of the AI Security Gateway. While the software has been tested, please note:
 
 - **Test thoroughly** before deploying to production/personal environments
 - **Report bugs** and provide feedback via [GitHub Issues](https://github.com/syphon1c/ai-security-gateway/issues)
@@ -82,6 +82,32 @@ Flexible OAuth 2.1 proxy with automatic client registration and dual operating m
 - **Consent Screens**: Optional user consent for OAuth flows with scope visibility
 - **Audit Logging**: Complete OAuth transaction logging for compliance (SOC2, ISO 27001, HIPAA, GDPR)
 - **Zero Configuration Clients**: Cursor IDE, Claude Desktop, and other MCP clients work out-of-the-box
+
+### 🧩 AI Security Skills Hub
+The Skills Hub exposes a full **MCP (Model Context Protocol) server** that AI assistants like Claude Code, Cursor, and Agent Zero connect to directly. Assistants submit skill source code, check approval status, and report suspicious runtime behaviour, all through standard MCP tool calls.
+
+- **Content-addressable approval**: Approval is tied to the SHA-256 hash of the skill source code. Any code change automatically resets the skill to pending, even if it was previously approved
+- **ZIP upload analysis**: Administrators can upload `.zip` files containing skill source code directly from the web UI for per-file analysis with findings attributed to specific files and line numbers
+- **Runtime activity reporting**: AI assistants can report suspicious behaviour during execution (data exfiltration, credential access, privilege escalation, unexpected network activity, behaviour changes), which automatically creates security alerts
+- **System prompt template**: A ready-to-use prompt template that instructs AI assistants to check skills on startup, submit new skills for analysis, and default to strict mode if the gateway is unreachable
+- **Full admin dashboard**: Stats, risk distribution, submission history, registry management, and activity reports all in one view
+
+### 🔄 A2A Card Change Detection
+
+A new security monitoring feature that continuously watches for **rug-pull attacks** against registered Agent-to-Agent (A2A) agents. A rug-pull attack occurs when a remote agent silently modifies its AgentCard after registration, potentially redirecting traffic, injecting malicious skills, or altering its capabilities without the administrator's knowledge.
+
+**Detected change types:**
+
+- **URL Changed** (Critical): Endpoint URL redirected, potential traffic hijacking
+- **Name Changed** (High): Agent identity was modified
+- **Protocol Version Changed** (High): A2A protocol version altered
+- **Skill Removed** (High): A previously available skill was silently dropped
+- **Description Changed** (Dynamic): Severity scales with similarity; a near-complete rewrite scores Critical, minor edits score Low
+- **Skill Added** (Medium): A new skill appeared that wasn't present at registration
+- **Capabilities Changed** (Medium): Streaming, push notification, or state flags toggled
+- **Version Changed** (Low/Medium): Version string updated; major version bumps score Medium
+- **Skill Description Changed** (Dynamic): Per-skill description changes scored by text similarity
+- **Skill Tags Changed** (Low): Skill metadata tags modified
 
 ### 🔄 Cross App Access (XAA) - 🧪 Experimental
 Okta Identity-JAG token support for cross-application access control:
