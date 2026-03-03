@@ -186,8 +186,25 @@ When proxying requests, the gateway silently injects unique, invisible tokens in
 - **Provider Memorisation**: A canary resurfaced without being present in the current context, suggesting the LLM provider has memorised prior conversation data
 - **Stale Canary**: A canary older than 7 days reappeared, a strong indicator of long-term memorisation by the model provider
 
+### 🛡️ Guardrail Providers
+Connect the AI Security Gateway to **third-party guardrail services** for real-time content screening of LLM requests and responses. Multiple providers run concurrently using a fan-out/fan-in pattern, where total latency equals the slowest provider rather than the sum.
+
+**Supported providers:**
+- **Groq Safeguard** — High-speed safety classification with configurable safety policy prompts
+- **EnkryptAI** — Comprehensive guardrail API with policy-based detection across NSFW, toxicity, PII, injection attacks, and more
+- **DynamoAI DynamoGuard** — Multi-policy moderation with per-policy scoring for prompt injection, toxicity, PII, hate speech, and violence
+- **GuardrailsAI** — Self-hosted, open-source guardrail with 67+ validators from Guardrails Hub covering jailbreak detection, PII, toxicity, and content policy
+- **Fiddler AI Guardrails** — Sub-second safety classification across 11 dimensions with optional 24-type PII detection
+
+**Key features:**
+- **Per-Proxy & Per-Team Assignment**: Apply providers globally to a proxy or scope them to specific teams for layered screening
+- **Configurable Behaviour**: Set direction (request/response/both), action (block/monitor), failure mode (fail-open/fail-closed), timeout (500ms–60s), and priority
+- **Health Checks & Test Playground**: Verify provider connectivity and test content screening directly from the dashboard
+- **Audit Logging**: Every provider check is logged with verdict, categories, confidence score, latency, and tokens used
+- **Dashboard & Metrics**: Per-provider and per-proxy statistics with top violation category breakdowns
+
 ### 🛡️ Guardrails Evaluation
-Guardrails Evaluation is automated penetration testing for your AI safety controls. It runs a comprehensive suite of security test cases against your endpoints and scores the results against the **OWASP LLM Top 10** and **NIST AI Risk Management Framework**.
+Guardrails Evaluation is automated penetration testing for your AI safety controls. It runs a comprehensive suite of security test cases against your endpoints or configured Guardrail Providers, and scores the results against the **OWASP LLM Top 10** and **NIST AI Risk Management Framework**.
 
 **Key features:**
 

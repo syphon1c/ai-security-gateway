@@ -5,6 +5,81 @@ All notable changes to the AI Security Gateway project will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Calendar Versioning](https://calver.org/).
 
+## [2026.3.1-beta]
+
+### Fifth Public Beta Release
+
+The **AI Security Gateway** is a unified security platform providing real-time monitoring, policy enforcement, and threat detection for Large Language Model (LLM) APIs and Model Context Protocol (MCP) servers. This release introduces **Guardrail Providers** for real-time third-party content screening, a redesigned navigation layout, and a new visual Pipeline view for OAuth access management.
+
+---
+
+#### 🛡️ Guardrail Providers
+
+A new integration layer that connects the AI Security Gateway to third-party guardrail services for real-time content screening of LLM requests and responses. Multiple providers can run concurrently using a fan-out/fan-in pattern, where total latency equals the slowest provider rather than the sum.
+
+**Supported providers:**
+
+- **Groq Safeguard** : High-speed safety classification with configurable safety policy prompts
+- **EnkryptAI** : Comprehensive guardrail API with policy-based detection across NSFW, toxicity, PII, injection attacks, and more
+- **DynamoAI DynamoGuard** : Multi-policy moderation with per-policy scoring for prompt injection, toxicity, PII, hate speech, and violence
+- **GuardrailsAI** : Self-hosted, open-source guardrail with 67+ validators from Guardrails Hub covering jailbreak detection, PII, toxicity, and content policy
+- **Fiddler AI Guardrails** : Sub-second safety classification across 11 dimensions with optional 24-type PII detection
+
+**Key features:**
+
+- **Per-Proxy & Per-Team Assignment**: Apply providers globally to a proxy or scope them to specific teams for layered screening
+- **Configurable Behaviour**: Set direction (request/response/both), action (block/monitor), failure mode (fail-open/fail-closed), timeout (500ms–60s), and priority
+- **Health Checks & Test Playground**: Verify provider connectivity and test content screening directly from the dashboard
+- **Audit Logging**: Every provider check is logged with verdict, categories, confidence score, latency, and tokens used
+- **Dashboard & Metrics**: Per-provider and per-proxy statistics with top violation category breakdowns
+
+---
+
+#### 🧪 Guardrail Evaluation Enhancements
+
+Guardrail Evaluations can now target **configured Guardrail Providers directly**, in addition to HTTP endpoints. This makes it easy to benchmark provider detection rates against the built-in 71 test cases across 12 attack categories without needing to set up a separate endpoint.
+
+---
+
+#### 🔔 Granular Alert Notifications
+
+Email and Slack integrations now support fine-grained control over which alerts trigger notifications:
+
+- **Per-Category Filtering**: Enable or disable notifications for specific alert categories : policy violations, tool access attempts, security events, system events, and compliance alerts
+- **Minimum Severity Threshold**: Set a minimum severity level (Critical, High, Medium, Low, Info) per integration channel
+- Each integration channel can be configured independently
+
+---
+
+#### 🧭 Redesigned Navigation
+
+The main sidebar navigation has been reorganised for improved clarity as the platform grows:
+
+- **Security Tools**: Hosts System Prompts, Canary Detection, and the Skill Security Hub
+- **Guardrails**: New menu group for Guardrail Providers and Guardrail Evaluations
+- **Access & Identity**: Teams & API Keys, OAuth Access, OAuth Proxy, User Activity, and Playground
+- **Infrastructure**: Proxy Management, A2A Agents, and Audit Logs
+
+---
+
+#### 🔀 OAuth Access Pipeline View
+
+A new visual Pipeline view for OAuth Access Management that shows the full user journey from provider to permissions:
+
+**Provider → Rules → Teams → Users → Tool Overrides → Summary**
+
+Each stage is an interactive section where administrators can drill into provider configurations, group assignment rules, team memberships, individual users, and per-user tool permission overrides. A summary bar displays quick statistics across the pipeline. The view mode (Pipeline or Table) is persisted across sessions.
+
+---
+
+#### 🐛 Bug Fixes & Improvements
+
+- Improvements to Canary Token Detection reliability and accuracy
+- System Prompt Injection stability fixes
+- External Storage sync and configuration improvements
+- General UI polish and consistency updates
+
+
 ## [2026.2.4-beta]
 
 ### 🎉 Fourth Public Beta Release
