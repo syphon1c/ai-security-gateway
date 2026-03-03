@@ -16,7 +16,7 @@ Getting started document can be found at [AI Security Gateway Docs](https://syph
 
 ## ⚠️ Beta Release Notice
 
-This is the **third public beta release (v2026.2.4-beta)** of the AI Security Gateway. While the software has been tested, please note:
+This is the **5th public beta release (v2026.3.1-beta)** of the AI Security Gateway. While the software has been tested, please note:
 
 - **Test thoroughly** before deploying to production/personal environments
 - **Report bugs** and provide feedback via [GitHub Issues](https://github.com/syphon1c/ai-security-gateway/issues)
