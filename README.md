@@ -1,6 +1,6 @@
 # AI Security Gateway
 
-[![Beta Release](https://img.shields.io/badge/Release-v2026.2.4--beta-orange?style=flat-square)](https://github.com/syphon1c/ai-security-gateway/releases)
+[![Beta Release](https://img.shields.io/badge/Release-v2026.4.1--beta-orange?style=flat-square)](https://github.com/syphon1c/ai-security-gateway/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 
@@ -16,7 +16,7 @@ Getting started document can be found at [AI Security Gateway Docs](https://syph
 
 ## ⚠️ Beta Release Notice
 
-This is the **5th public beta release (v2026.3.1-beta)** of the AI Security Gateway. While the software has been tested, please note:
+This is the **6thth public beta release (v2026.4.1-beta)** of the AI Security Gateway. While the software has been tested, please note:
 
 - **Test thoroughly** before deploying to production/personal environments
 - **Report bugs** and provide feedback via [GitHub Issues](https://github.com/syphon1c/ai-security-gateway/issues)
@@ -523,6 +523,6 @@ Special thanks to:
 
 ---
 
-**AI Security Gateway 2026.2.3-beta** - Test and secure your AI instances - meant for research and testing!
+**AI Security Gateway 2026.4.1-beta** - Test and secure your AI instances - meant for research and testing!
 
 *Released as-is for testing and community feedback.*
