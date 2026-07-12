@@ -16,7 +16,7 @@ Getting started document can be found at [AI Security Gateway Docs](https://docs
 
 ## ⚠️ Beta Release Notice
 
-This is the **seventh public beta release (v2026.7.5)** of the AI Security Gateway. While the software has been tested, please note:
+This is the **seventh public beta release (v2026.7.6)** of the AI Security Gateway. While the software has been tested, please note:
 
 - **Test thoroughly** before deploying to production/personal environments
 - **Report bugs** and provide feedback via [GitHub Issues](https://github.com/syphon1c/ai-security-gateway/issues)
@@ -25,7 +25,7 @@ This is the **seventh public beta release (v2026.7.5)** of the AI Security Gatew
 
 **This is my personal project for testing, learning and personal requirements**
 
-## ✨ What's New in v2026.7.5
+## ✨ What's New in v2026.7.6
 
 This major release extends the gateway from securing *human-attributed* traffic to **attesting the agent workloads themselves**, inventorying **every AI asset it can see**, and publishing a standards-compliant **discovery layer** in front of your agents, MCP servers, and skills:
 

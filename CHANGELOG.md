@@ -5,7 +5,7 @@ All notable changes to the AI Security Gateway project will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Calendar Versioning](https://calver.org/).
 
-## [v2026.7.5]
+## [v2026.7.5-6]
 
 ### Seventh Public Beta Release
 
@@ -75,6 +75,7 @@ Rate limiting is now enforced at finer granularity, in addition to the existing 
 - Fixed A2A invocation handling and corrected **group access mode** evaluation
 - Hardened **fail-closed** behaviour for A2A access control, so denied or unverified agents are rejected by default
 - Expanded database test coverage and internal refactors across the API, database, and frontend layers for maintainability
+- LLM and MCP Proxy performance improvements
 
 ---
 
