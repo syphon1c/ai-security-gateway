@@ -43,6 +43,23 @@ npm install axios open readline
 ts-node mcp-oauth-example.ts
 ```
 
+### 3. **Cross App Access (XAA)** (ID-JAG Exchange)
+
+Steps 3 and 4 of the Cross App Access flow: exchange an ID-JAG from your identity
+provider for a gateway access token, then use it against a proxy.
+
+- **Shell**: `xaa/exchange-id-jag.sh` - discovery, exchange, resource call, token inspector
+- **Go**: `xaa/xaa-client.go` - the same flow with the error handling written out
+
+**See**: [`xaa/README.md`](xaa/README.md) for setup and the step 2 call at your IdP
+
+**Quick Start:**
+
+```bash
+export XAA_CLIENT_ID=... XAA_CLIENT_SECRET=...
+./examples/xaa/exchange-id-jag.sh run "$ID_JAG"
+```
+
 ## What These Examples Do
 
 1. **Start OAuth Flow** → Opens browser for login
@@ -81,8 +98,8 @@ Press Enter to start...
 🔄 Completing OAuth flow...
 
 ✅ OAuth authentication successful!
-👤 Logged in as: Gareth Phillips (gareth@ai-gateway.localhost)
-🔑 Session token: VKBRWGztPGiF-777Tub33frj...
+👤 Logged in as: Gareth Phillips (gareth@scapecom.com)
+🔑 Session token: VKQRZGzyPGiF-666Tu0NRhrj...
 
 ============================================================
   🔧 Step 2: List MCP Tools
@@ -128,7 +145,7 @@ See **`/docs/developer-oauth-guide.md`** for detailed API reference and usage pa
 ### Session Token Format
 
 ```
-X-Session-Token: VKBRWGztPGiF-777Tub33frjrJ0LR_D3ad7vmY30g0=
+X-Session-Token: VKQRZGzyPGiF-666Tu0NRhrjjrJ0LR_BePN7vmY30g0=
 ```
 
 ### MCP Request with OAuth
@@ -149,8 +166,8 @@ response = requests.post(
 ### User Attribution
 
 Every request is logged with your identity:
-- **User**: gareth@ai-gateway.localhost
-- **Timestamp**: 2025-12-24T22:53:35
+- **User**: gareth@scapecom.com
+- **Timestamp**: 2025-10-24T22:53:35
 - **Action**: tools/list
 - **Proxy**: Test (ID: 3)
 

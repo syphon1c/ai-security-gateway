@@ -300,13 +300,10 @@ const token = await exchangeCodeForToken(
 ## Next Steps
 
 - **Production Integration**: See `examples/oauth-proxy-tests/` for complete examples
-- **Custom Providers**: See `docs/oauth-providers/` for provider configuration guides
-- **Security Best Practices**: See `docs/technical/oauth-proxy-security.md`
-- **MCP Client Integration**: See `docs/user-guides/mcp-oauth-integration.md`
 
 ## Support
 
 For questions or issues:
-- 📖 Documentation: `docs/`
+- 📖 Documentation site
 - 🐛 Issues: GitHub Issues
 - 💬 Discussions: GitHub Discussions

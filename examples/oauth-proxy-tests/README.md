@@ -245,8 +245,4 @@ Make sure your redirect URIs match the patterns configured in `oauth_proxy_allow
 - `cursor://*` - Cursor IDE custom scheme
 - `vscode://*` - VS Code custom scheme
 
-## Related Documentation
-
-- [OAuth Proxy Testing Guide](../../docs/testing/oauth-proxy-testing-guide.md)
-- [OAuth Proxy Architecture](../../docs/technical/architecture/oauth-proxy.md)
 
