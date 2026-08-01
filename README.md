@@ -1,53 +1,67 @@
 # AI Security Gateway
 
-[![Beta Release](https://img.shields.io/badge/Release-v2026.7.5-orange?style=flat-square)](https://github.com/syphon1c/ai-security-gateway/releases)
+[![Release](https://img.shields.io/badge/Release-v2026.8.1-brightgreen?style=flat-square)](https://github.com/syphon1c/ai-security-gateway/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 
-> **🚀 Public Beta Release** - A security gateway and monitoring platform for LLM APIs, Model Context Protocol (MCP) servers and Agent-to-Agent (A2A) Registry.
+> **🚀 First Full Release** - A security gateway and monitoring platform for LLM APIs, Model Context Protocol (MCP) servers and Agent-to-Agent (A2A) Registry. Free and self-hosted.
 
 ## What is the AI Security Gateway?
 
 The **AI Security Gateway** is a unified security platform that provides **real-time monitoring**, **policy enforcement**, and **threat detection** and a number of **new security controls** for Large Language Model (LLM) APIs, Model Context Protocol (MCP) servers and Agent-to-Agent (A2A). It acts as an intelligent proxy layer between your applications and AI services and tooling, giving you complete visibility and security control over AI interactions and automations.
 
-Think of it as a **security gateway** for your AI infrastructure - monitoring every request, applying various security policies, tracking usage, and ensuring compliance with your organization's security requirements. Although this is just a personal project for my own testing and needs its grown a lot and ready for more users.
+Think of it as a **security gateway** for your AI infrastructure - monitoring every request, applying various security policies, tracking usage, and ensuring compliance with your organization's security requirements. It started as a personal project for my own testing and needs; it has grown a lot and is now ready for more users.
 
-Getting started document can be found at [AI Security Gateway Docs](https://docs.aisecgateway.com/) and there is a new [AI Security Gateway Website ](https://aisecgateway.com/)
+Getting started document can be found at [AI Security Gateway Docs](https://docs.aisecgateway.com/) and there is a new [AI Security Gateway Website](https://aisecgateway.com/)
 
-## ⚠️ Beta Release Notice
+## ✅ Release Notice
 
-This is the **seventh public beta release (v2026.7.6)** of the AI Security Gateway. While the software has been tested, please note:
+**v2026.8.1** is the **first full (non-beta) release** of the AI Security Gateway, following seven public betas. This release focused on enterprise readiness: a whole-platform security review, authentication and session hardening, stability and race-condition fixes across the proxy data path, and a documentation overhaul.
 
-- **Test thoroughly** before deploying to production/personal environments
 - **Report bugs** and provide feedback via [GitHub Issues](https://github.com/syphon1c/ai-security-gateway/issues)
-- **Review the [CHANGELOG.md](CHANGELOG.md)** for complete feature details and known limitations
+- **Review the [CHANGELOG.md](CHANGELOG.md)** for complete feature details
 - **Community feedback** is welcomed to help improve the software
 
-**This is my personal project for testing, learning and personal requirements**
+### Upgrading from a beta release?
 
-## ✨ What's New in v2026.7.6
+- Release packages **no longer include a pre-created `.env`**. Run `./install.sh` (or copy `env.example` to `.env` and set your keys). The gateway now **refuses to start** on missing, default, or template placeholder values for `JWT_SECRET` / `ENCRYPTION_KEY`
+- Existing sessions are invalidated on upgrade; users must sign in again
+- All new controls are **opt-in**; existing proxy configurations continue to behave as before
 
-This major release extends the gateway from securing *human-attributed* traffic to **attesting the agent workloads themselves**, inventorying **every AI asset it can see**, and publishing a standards-compliant **discovery layer** in front of your agents, MCP servers, and skills:
+## ✨ What's New in v2026.8.1
 
-- **🛡️ Cryptographic Agent Identity (SPIFFE / DID / X.509)** - verifiable identity for the agent workload itself, proven on every request
-- **🔍 Shadow-AI Discovery & AI Asset Inventory** - a governed inventory of every AI asset the gateway can see, automatically flagging (and optionally blocking) shadow AI
-- **🧭 Agentic Resource Discovery (ARD)** - turns the gateway into a standards-compliant discovery service for your agentic resources
-- **🚦 Per-Tool & Per-User Rate Limiting** - finer-grained sliding-window limits in addition to proxy-level controls
-- **🌏 APAC PII Localization** - detection and checksum-validated masking of Asia-Pacific national identifiers (Taiwan, Japan, PRC, Korea, Singapore, Hong Kong, Australia, India)
-- **🔧 Streaming reliability fix** - SSE / `stream=true` responses are now forwarded in real time and no longer capped by the write timeout, alongside a round of Agent-to-Agent reliability fixes
+Where the beta series focused on new capability, this release focuses on **enterprise readiness**, plus two protocol upgrades:
+
+- **🔌 MCP 2026-07-28 Protocol Support** - the gateway speaks both eras of the Model Context Protocol side by side: era-aware enforcement (never guessed), per-proxy conformance mode (enforce or observe), a compatibility bridge so modern clients can reach legacy servers (downgrades always alerted), event-by-event SSE-over-POST inspection, and new-surface protections: credential-phishing detection in elicitation results, tool schema safety analysis, protocol extension deny-lists, and minimum-version pinning
+- **🔁 Cross App Access (XAA) Conformance** - verified against `draft-ietf-oauth-identity-assertion-authz-grant-04` and the xaa.dev reference implementation; the exchange now mints signed `at+jwt` access tokens accepted end-to-end, with single-use grants, step-up authentication (RFC 9470), and discovery-based JWKS
+- **🔐 Authentication & Session Hardening** - server-side logout revocation, immediate session invalidation on role change or account disable, a session management UI, login rate limits with a timing-oracle fix, forced password rotation, and hard startup failure on missing/default/placeholder secrets
+- **🛡️ Whole-Platform Security Review** - fail-closed policy loading and permission checks, SSRF guards on every outbound fetch, guardrail and connector credentials encrypted at rest and masked in responses, and complete audit coverage of privileged actions
+- **🪪 Agent Identity Hardening** - `did:key` identities must be registered before they verify, full DPoP proof verification (RFC 9449), identity headers stripped before forwarding upstream, and per-proxy enforcement configurable in the UI
+- **🧪 Detection Quality** - an 85-case guardrails evaluation corpus plus custom test-case authoring with JSON import/export, canary cross-user leak detection, and migration to the A2A spec v1.0 SDK
+- **📦 Versioned, Verifiable Builds** - every binary reports its real version (`./unified-admin --version`), and release packages are verified end to end before publishing
 
 See the [CHANGELOG.md](CHANGELOG.md) for the complete list.
 
 
 ## 🎯 Key Features
 
+### 🔌 MCP 2026-07-28 Protocol Support
+The gateway speaks both eras of the Model Context Protocol side by side: the modern **2026-07-28** specification and the legacy **2024-11-05** specification.
+- **Era-aware proxying**: enforcement follows the protocol era each request *declares*, never a guess; the upstream's era is learned through a real `server/discover` probe
+- **Conformance enforcement**: on modern requests, JSON-RPC batches are refused and the mirrored `MCP-Protocol-Version` / `Mcp-*` headers are validated against the body, with spec-correct protocol errors
+- **Enforce or observe**: a per-proxy conformance mode lets you watch violations before you start blocking them
+- **Compatibility bridge**: modern clients can reach legacy servers through a translation layer, and a bridged downgrade always raises an alert
+- **New-surface security**: credential-phishing prompts inside elicitation results raise alerts, tool schemas are analysed for unsafe shapes, protocol extensions can be deny-listed, and a minimum protocol version can be pinned per proxy
+- **Tasks stay governed**: tool permissions and rate limits follow MCP task handles, so a disabled tool cannot keep delivering results through an earlier task
+
 ### 🛡️ Cryptographic Agent Identity (SPIFFE / DID / X.509)
 The gateway already records **which human** is behind a request (attribution); Agent Identity adds **attestation**, a verifiable cryptographic identity for the **agent workload itself**, proven on every request. So each action ties to *both* a person *and* a specific, verified agent (e.g. `spiffe://acme.org/checkout-bot`). The gateway is a **verifier first** (it validates identities issued by your SPIRE/IdP/DID infrastructure) and a CA never, except for an explicit, opt-in issuance mode.
-- **Three identity formats, one pipeline**: SPIFFE **JWT-SVIDs** (header-borne), SPIFFE **X.509-SVIDs** (mTLS, or a forwarded client-cert header behind a trusted front proxy), and **DIDs**, `did:key` (key embedded in the identifier) and `did:web` (resolved from admin-approved hosts, SSRF-guarded)
-- **Opt-in per proxy**: `off` / `optional` (verify-and-attribute) / `required` (fail-closed `401`); plus a global default and per-proxy allowed-trust-domain lists
+- **Three identity formats, one pipeline**: SPIFFE **JWT-SVIDs** (header-borne), SPIFFE **X.509-SVIDs** (mTLS, or a forwarded client-cert header behind a trusted front proxy), and **DIDs**, `did:key` (key embedded in the identifier, registration-gated before it verifies) and `did:web` (resolved from admin-approved hosts, SSRF-guarded)
+- **Opt-in per proxy**: `off` / `optional` (verify-and-attribute) / `required` (fail-closed `401`); plus a global default and per-proxy allowed-trust-domain lists, all configurable in the proxy settings UI
 - **Identity-based enforcement**: a **deny-biased** Agent dimension on the MCP tool-permission hierarchy (an agent rule can only *further restrict* the human decision, never escalate) and a per-proxy **autonomy floor** that rejects insufficiently-trusted agents
 - **Verifiable delegation chains**: an `X-Agent-Delegation-Chain` of signed on-behalf-of hops, verified end-to-end with a confused-deputy guard, an unverified chain is never trusted
-- **Proof-of-possession & step-up**: optional DPoP sender-constraint (enforced when an identity pins a key); a proxy can **require** proof-of-possession and answer bearer-only credentials with a `WWW-Authenticate: DPoP` step-up challenge
+- **Proof-of-possession & step-up**: full DPoP proof verification (RFC 9449 - signature, thumbprint, request binding, freshness, single-use `jti`); a proxy can **require** proof-of-possession and answer bearer-only credentials with a `WWW-Authenticate: DPoP` step-up challenge
+- **Credentials stop at the gateway**: on a verifying proxy, identity and DPoP headers are stripped before forwarding upstream
 - **A2A impersonation detection**: bind an identity to a registered A2A agent and the card monitor flags any AgentCard not signed by the bound key (critical), complementing rug-pull field-diff detection
 - **Revocation that reaches live sessions**: revoking an identity blocks it on the next request **and** tears down its in-flight A2A streams and SSE proxy connections within seconds
 - **Opt-in gateway issuance**: when enabled, mint short-lived (DPoP-bindable) agent SVIDs, the signing key lives in memory only and rotates on restart, so the gateway never becomes a persistent CA
@@ -78,7 +92,7 @@ Turn the gateway into a **discovery service for agentic resources** using the op
 - **Dashboard tile**: Catalog and federation status surfaced in the Security dashboard
 
 ### 🚦 Per-Tool & Per-User Rate Limiting
-Rate limiting is now enforced at finer granularity, in addition to the existing proxy-level controls:
+Rate limiting is enforced at finer granularity, in addition to the existing proxy-level controls:
 - **Per-tool limits**: sliding-window rate limits applied per MCP tool, keyed by user · proxy · tool (`0` = unlimited)
 - **Per-user limits**: proxy-wide sliding-window limits keyed by user · proxy
 - **Hierarchy-aware**: per-tool limits resolve through the User override → Group → Global proxy-setting hierarchy alongside the enable/disable decision for each tool
@@ -102,7 +116,7 @@ Run and manage **multiple MCP and LLM proxy instances** simultaneously through a
 - Database-backed persistence for configurations, alerts, and audit logs
 - Per-proxy health monitoring and performance metrics
 
-### 🛡️ Custom Security Policies (Gaurdrails)
+### 🛡️ Custom Security Policies (Guardrails)
 Apply **granular security policies** to individual proxies or groups:
 - **250+ built-in default detection rules** across critical, high, medium, and low severity levels
 - JSON-based policy configuration for easy customization
@@ -150,7 +164,7 @@ The Skills Hub exposes a full **MCP (Model Context Protocol) server** that AI as
 
 ### 🔄 A2A Card Change Detection
 
-A new security monitoring feature that continuously watches for **rug-pull attacks** against registered Agent-to-Agent (A2A) agents. A rug-pull attack occurs when a remote agent silently modifies its AgentCard after registration, potentially redirecting traffic, injecting malicious skills, or altering its capabilities without the administrator's knowledge.
+A security monitoring feature that continuously watches for **rug-pull attacks** against registered Agent-to-Agent (A2A) agents. A rug-pull attack occurs when a remote agent silently modifies its AgentCard after registration, potentially redirecting traffic, injecting malicious skills, or altering its capabilities without the administrator's knowledge.
 
 **Detected change types:**
 
@@ -166,17 +180,18 @@ A new security monitoring feature that continuously watches for **rug-pull attac
 - **Skill Tags Changed** (Low): Skill metadata tags modified
 
 ### 🔄 Cross App Access (XAA) - 🧪 Experimental
-Okta Identity-JAG token support for cross-application access control:
-- **ID-JAG Token Exchange**: Validate and exchange Okta Identity-JAG tokens for cross-app authorization
-- **Client ID Mapping**: Configure mappings between IdP client IDs and resource authorization server client IDs
+Cross App Access support for enterprise identity providers, conformance-checked against `draft-ietf-oauth-identity-assertion-authz-grant-04` and the xaa.dev reference implementation:
+- **ID-JAG Token Exchange**: Validate and exchange Identity Assertion Authorization Grants (Okta ID-JAG) for cross-app authorization, with server-derived audiences and single-use grants
+- **Signed Access Tokens**: The exchange mints signed `at+jwt` access tokens (carrying `aud`, `proxy_id`, `token_use=xaa`) that resource servers can verify via published keys
+- **Step-Up Authentication (RFC 9470)**: Per-proxy step-up requirements for sensitive resources
+- **Client ID Mapping**: Configure mappings between IdP client IDs and resource authorization server client IDs, with rotatable client secrets
 - **Token Revocation**: Revoke ID-JAG tokens individually by JTI or in bulk by subject/IdP provider
-- **JWKS Caching**: Automatic fetching and caching of JWKS from Okta IdP for efficient token validation
+- **JWKS via Discovery**: IdP key sets are resolved through provider discovery (not a guessed path) and cached for efficient validation
 - **Per-Proxy Configuration**: Enable XAA on specific proxy instances through the web interface
-- **Statistics Dashboard**: Real-time monitoring of ID-JAG token usage, JWKS cache status, and client mapping counts
+- **Statistics Dashboard**: Real-time monitoring of token usage, JWKS cache status, and client mapping counts
 - **Audit Integration**: Complete audit logging of XAA events (token exchange, validation, revocation) for compliance
-- **Web UI Management**: UI components for managing client mappings, viewing stats, and revoking tokens
 
-**⚠️ Experimental Feature**: XAA currently supports Okta's proprietary ID-JAG token format. This feature is under active development and may change significantly as cross-app access standards evolve. Use with caution in production environments.
+**⚠️ Experimental Feature**: The Identity Assertion Authorization Grant specification is still an IETF draft. This feature may change as the standard evolves. Use with caution in production environments.
 
 ### 📊 Real-Time Monitoring & Analytics
 Comprehensive visibility into your AI infrastructure:
@@ -221,7 +236,7 @@ Protect against malicious changes and supply chain attacks in MCP tools:
 - **Automated Response**: Automatically disable or quarantine suspicious tools based on detection rules
 
 ### 🤖 Agent-to-Agent (A2A) Registry
-Centralized management for A2A-compatible agents with complete security and access control:
+Centralized management for A2A-compatible agents with complete security and access control, now on the **A2A v1.0 specification**:
 - **Agent Registration**: Auto-discover agents via AgentCard URLs or manually register with JSON
 - **AgentCard Management**: Automatic fetching and updating of agent capabilities and metadata
 - **Access Control**: Fine-grained user group-based access with per-agent rate limiting
@@ -232,7 +247,7 @@ Centralized management for A2A-compatible agents with complete security and acce
 - **Real-Time Monitoring**: View invocation logs, task states, and agent usage analytics
 
 ### 🕵️ Canary Token Detection
-Canary Token Injection is a security feature that helps detect when data from one user or session is accidentally exposed to another. Think of it as a tripwire — an early warning system that alerts you to potential data leakage in your AI systems.
+Canary Token Injection is a security feature that helps detect when data from one user or session is accidentally exposed to another. Think of it as a tripwire - an early warning system that alerts you to potential data leakage in your AI systems.
 
 When proxying requests, the gateway silently injects unique, invisible tokens into each user's conversation. If a token surfaces where it shouldn't, you'll know immediately.
 
@@ -246,11 +261,11 @@ When proxying requests, the gateway silently injects unique, invisible tokens in
 Connect the AI Security Gateway to **third-party guardrail services** for real-time content screening of LLM requests and responses. Multiple providers run concurrently using a fan-out/fan-in pattern, where total latency equals the slowest provider rather than the sum.
 
 **Supported providers:**
-- **Groq Safeguard** — High-speed safety classification with configurable safety policy prompts
-- **EnkryptAI** — Comprehensive guardrail API with policy-based detection across NSFW, toxicity, PII, injection attacks, and more
-- **DynamoAI DynamoGuard** — Multi-policy moderation with per-policy scoring for prompt injection, toxicity, PII, hate speech, and violence
-- **GuardrailsAI** — Self-hosted, open-source guardrail with 67+ validators from Guardrails Hub covering jailbreak detection, PII, toxicity, and content policy
-- **Fiddler AI Guardrails** — Sub-second safety classification across 11 dimensions with optional 24-type PII detection
+- **Groq Safeguard** - High-speed safety classification with configurable safety policy prompts
+- **EnkryptAI** - Comprehensive guardrail API with policy-based detection across NSFW, toxicity, PII, injection attacks, and more
+- **DynamoAI DynamoGuard** - Multi-policy moderation with per-policy scoring for prompt injection, toxicity, PII, hate speech, and violence
+- **GuardrailsAI** - Self-hosted, open-source guardrail with 67+ validators from Guardrails Hub covering jailbreak detection, PII, toxicity, and content policy
+- **Fiddler AI Guardrails** - Sub-second safety classification across 11 dimensions with optional 24-type PII detection
 
 **Key features:**
 - **Per-Proxy & Per-Team Assignment**: Apply providers globally to a proxy or scope them to specific teams for layered screening
@@ -264,7 +279,7 @@ Guardrails Evaluation is automated penetration testing for your AI safety contro
 
 **Key features:**
 
-- **80+ built-in test cases** across 12 categories, with the ability to add your own custom tests
+- **85 built-in test cases** across 12 categories, plus full custom test-case management: author single-turn and multi-turn tests with a guided editor, and import/export test suites as JSON
 - **Compliance scoring** mapped to OWASP LLM Top 10 and NIST AI RMF
 - **Test any endpoint**: works with any API that wraps an LLM, not just direct LLM providers. Import endpoints via curl command paste
 - **Multi-turn attack simulation**: tests that span multiple conversation turns to detect escalation vulnerabilities
@@ -291,13 +306,17 @@ curl -LO https://github.com/syphon1c/ai-security-gateway/releases/latest/downloa
 tar -xzf unified-admin-linux-amd64.tar.gz
 cd unified-admin-linux-amd64
 
-# 2. Run installation script (generates secure keys automatically) Optional - skip to ./start.sh
-chmod +x install.sh verify.sh start.sh
-./install.sh # skip for now and run ./verify.sj
+# 2. Run the installation script (generates secure keys and creates .env)
+./install.sh
 
-# 3. Start the gateway
+# 3. Verify and start the gateway
+./verify.sh
 ./start.sh
 ```
+
+> **Note:** the gateway refuses to start until real keys are set - the package ships no pre-made `.env`, and the template's placeholder values are rejected. If you skip step 2, `./start.sh` will run `install.sh` for you automatically when no `.env` exists.
+
+> **macOS:** if the binary was downloaded with a browser and macOS reports it "cannot be opened because the developer cannot be verified", remove the quarantine attribute: `xattr -d com.apple.quarantine unified-admin`
 
 **Windows:**
 
@@ -363,15 +382,15 @@ notepad .env  # Edit and set JWT_SECRET and ENCRYPTION_KEY
 
 The release package includes helpful scripts to make setup easier:
 
-- **`install.sh`** (Linux/macOS) - Interactive installation (this is optional - quickstart with start.sh):
+- **`install.sh`** (Linux/macOS) - Interactive installation:
   - Generates secure JWT_SECRET and ENCRYPTION_KEY automatically
-  - Creates and configures .env file
+  - Creates and configures the .env file (required - the package ships no pre-made .env)
   - Optionally installs as a system service
-  - Run: `./install.sh`
+  - Run: `./install.sh` (start.sh runs it automatically if .env is missing)
 
 - **`verify.sh`** (Linux/macOS) - Verify installation:
   - Checks binary is executable
-  - Validates .env configuration
+  - Validates .env configuration (including detecting placeholder keys)
   - Tests port availability
   - Checks Docker setup
   - Run: `./verify.sh`
@@ -392,7 +411,7 @@ Each release package includes everything you need:
 - ✅ **Pre-built frontend** - Production-optimized Vue.js app ready for Docker deployment
 - ✅ **Docker configuration** - `docker-compose.frontend.yml` and `Dockerfile.frontend`
 - ✅ **Default security policies** - 15 JSON policy files with 250+ detection rules
-- ✅ **Configuration templates** - `env.example`
+- ✅ **Configuration templates** - `env.example` (copy to `.env` and set your keys)
 - ✅ **Documentation** - `QUICKSTART.md` and `INSTALL.md` guides
 
 **No compilation required** - download, configure, and run!
@@ -400,7 +419,7 @@ Each release package includes everything you need:
 
 ### Required Configuration
 
-Before running the gateway, you **MUST** configure these critical environment variables:
+Before running the gateway, you **MUST** configure these critical environment variables. The gateway **refuses to start** with missing, default, or template placeholder values.
 
 **Easiest way:** Use the installation script which generates secure keys automatically:
 
@@ -489,7 +508,7 @@ That's it! You now have a fully functional AI Security Gateway running.
 
 **For detailed setup instructions, see `QUICKSTART.md` in the release package.**
 
-#### Option 3: Frontend Deployment Options (Production)
+### Frontend Deployment Options (Production)
 
 For production deployments, you have two options for serving the frontend:
 
@@ -527,7 +546,7 @@ npm run build
 
 For detailed guides and advanced configuration, see the online documentation:
 
-[AI Security Gateway Docs](https://syphon1c.github.io/)
+[AI Security Gateway Docs](https://docs.aisecgateway.com/)
 
 ## 🛠️ Basic Usage Examples
 
@@ -548,11 +567,11 @@ The easiest way to use the AI Security Gateway is through the web interface:
 ## 🤝 Support & Contributing
 
 ### 📚 Documentation
-Documents can be found at [AI Security Gateway Docs](https://syphon1c.github.io/)
+Documents can be found at [AI Security Gateway Docs](https://docs.aisecgateway.com/)
 
 ### 🐛 Bug Reports & Feature Requests  
-This is a beta release - community feedback is welcomed! Use [GitHub Issues](https://github.com/syphon1c/ai-security-gateway/issues) to:
-- Report bugs and unexpected behaviour
+Community feedback is welcomed! Use [GitHub Issues](https://github.com/syphon1c/ai-security-gateway/issues) to:
+- Report bugs and unexpected behaviour (please include the output of `./unified-admin --version`)
 - Request new features or improvements  
 - Share usage experiences and suggestions
 - Contribute to documentation improvements
@@ -564,11 +583,11 @@ Contributions will be welcomed once the full source code is released:
 - Documentation enhancements
 - Test coverage improvements
 
-**Note**: When using AI assistance for contributions, always verify the code works as expected and include appropriate tests, not against it buit verify please.
+**Note**: When using AI assistance for contributions, always verify the code works as expected and include appropriate tests.
 
 ### 📞 Support
 - **GitHub Issues**: Primary support channel for bug reports and questions
-- **Documentation**: Comprehensive guides available: [AI Security Gateway Docs](https://syphon1c.github.io/)
+- **Documentation**: Comprehensive guides available: [AI Security Gateway Docs](https://docs.aisecgateway.com/)
 - **Examples**: Sample configurations and usage patterns in [`/examples`](examples/)
 
 ## 📝 Development Note
@@ -582,10 +601,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 Special thanks to:
-- Contributors and early adopters providing valuable feedback
+- Contributors and early adopters providing valuable feedback through the beta series
 
 ---
 
-**AI Security Gateway v2026.7.5** - Test and secure your AI instances - meant for research and testing!
+**AI Security Gateway v2026.8.1** - Secure every AI interaction. Free and self-hosted.
 
-*Released as-is for testing and community feedback.*
+*Provided as-is under the MIT License.*
